@@ -1,0 +1,2 @@
+model_checkpoint_path: "multiclass_potholes_model"
+all_model_checkpoint_paths: "multiclass_potholes_model"
