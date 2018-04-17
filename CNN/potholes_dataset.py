@@ -63,7 +63,7 @@ def load_train(path, filename, image_size):
 class DataSet(object):
 
   def __init__(self, images, labels, img_names):
-    self._num_examples = images.shape[0]
+    self._num_remaining_images = images.shape[0]
 
     self._images = images
     self._labels = labels
@@ -86,8 +86,8 @@ class DataSet(object):
 
 
   @property
-  def num_examples(self):
-    return self._num_examples
+  def num_remaining_images(self):
+    return self._num_remaining_images
 
   @property
   def epochs_done(self):
@@ -100,16 +100,16 @@ class DataSet(object):
     #print('Batch Size {0}'.format(batch_size))
     #print('_num_examples Size {0}'.format(self._num_examples))
     
-    if self._index_in_epoch > self._num_examples:
+    if self._index_in_epoch > self._num_remaining_images:
       # After each epoch we update this
       self._epochs_done += 1
       start = 0
       self._index_in_epoch = batch_size
-      assert batch_size <= self._num_examples
+      assert batch_size <= self._num_remaining_images
     end = self._index_in_epoch
 
     #return self._images[start:end], self._labels[start:end], self._img_names[start:end], self._cls[start:end]
-    return self._images[start:end], self._labels[start:end], self._img_names[start:end]
+    return self._images[start:end], self._labels[start:end], self._num_remaining_images[start:end]
 
 
 # In[1]:
