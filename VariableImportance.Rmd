@@ -1,0 +1,49 @@
+---
+title: "F-FeatureImportance"
+author: "Om Soni"
+date: "5/8/2018"
+output: html_document
+---
+
+```{r}
+
+library(nnet)
+library(NeuralNetTools)
+library(devtools)
+library(ggplot2)
+library(olsrr)
+library(scales)
+library(reshape)
+setwd('/Users/omsoni/Downloads')
+Fdata = read.csv("WIKI-F.csv", header=T)
+mod <- nnet(Open ~., data = Fdata, MaxNWts =10000000, size = 10)
+
+#create a pretty color vector for the bar plot
+cols<-colorRampPalette(c('lightgreen','lightblue'))(22)
+ 
+#use the function on the model created above
+par(mar=c(3,4,1,1),family='serif')
+
+gar.fun('Ford Stock',mod,y.lab='Rel. importance') 
+
+lekprofile(mod)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+library(olsrr)
+## Do a forward selection using stepwide
+head(Fdata)
+model0 = lm(Open ~1 , data =Fdata)
+modeln = lm(Open ~. , data =Fdata)
+
+slm1 =step(model0, scope=list(lower=model0, upper=modeln), direction="forward")
+
+#slm1 <- step(modeln)
+summary(slm1)
+slm1$anova
+```
+```{r}
+library(olsrr)
+ols_step_forward_aic(modeln)
+```

@@ -1,27 +1,15 @@
-
-# coding: utf-8
-
-# In[3]:
-
-
 import pandas as pd
 import numpy as np
 import os
 import cv2
 from sklearn.utils import shuffle
 
-
-# In[23]:
-
-
-def load_train(path, filename, image_size):
+def loadImageDataSet(path, filename, image_size):
     images = []
     imgLabels = []
     img_names = []
     metadata_file = os.path.join(path, filename)
-    #'./cv-tricks.com/Tensorflow-tutorials/tutorial-2-image-classifier/data/Subset1-Simplex/simpleTrainFullPhotosSortedFullAnnotations.csv'
     df = pd.read_csv(metadata_file, header=None)
-    #path = "./cv-tricks.com/Tensorflow-tutorials/tutorial-2-image-classifier/data/Subset1-Simplex/"
     print(df.head(5))
     files = df.iloc[:,0].map(str)
     labels = df.iloc[:,1].values
@@ -44,7 +32,6 @@ def load_train(path, filename, image_size):
         label = np.zeros(len(classes))
         cls = labels[index]
         label[cls] = 1
-        #print('Class: {0} and labels {1}', format(cls), format(label))
         index+=1
         imgLabels.append(label)
         flbase = os.path.basename(file)
@@ -55,9 +42,6 @@ def load_train(path, filename, image_size):
     img_names = np.array(img_names)
     #print('imgLabels:{0}'.format(imgLabels))
     return images, imgLabels, img_names
-
-
-# In[2]:
 
 
 class DataSet(object):
@@ -112,15 +96,12 @@ class DataSet(object):
     return self._images[start:end], self._labels[start:end], self._num_remaining_images[start:end]
 
 
-# In[1]:
-
-
-def read_train_sets(train_path, filename, image_size,validation_size):
+def split_test_train(train_path, filename, image_size,validation_size):
   class DataSets(object):
     pass
   data_sets = DataSets()
 
-  images, labels, img_names = load_train(train_path,filename, image_size)
+  images, labels, img_names = loadImageDataSet(train_path,filename, image_size)
   images, labels, img_names = shuffle(images, labels, img_names)  
 
   if isinstance(validation_size, float):
@@ -139,6 +120,3 @@ def read_train_sets(train_path, filename, image_size,validation_size):
 
   data_sets.train = DataSet(train_images, train_labels, train_img_names)
   data_sets.valid = DataSet(validation_images, validation_labels, validation_img_names)
-
-  return data_sets
-
