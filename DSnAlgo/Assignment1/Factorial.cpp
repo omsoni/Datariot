@@ -1,7 +1,7 @@
 //
 //  Factorial.cpp
 //  Assignment1
-//
+//  File contains reusable function to compute factorial
 //  Created by Om Soni on 5/28/18.
 //  Copyright © 2018 Om Soni. All rights reserved.
 //
